@@ -1,0 +1,15 @@
+{
+  "name": "esp32eq",
+  "version": "0.0.1",
+  "description": "Pc app for equalizer for esp32-2432S028 board",
+  "main": "index.js",
+  "author": "mehmetakyurek",
+  "license": "MIT",
+  "dependencies": {
+    "electron": "^23.1.2",
+    "serialport": "^10.5.0"
+  },
+  "scripts": {
+    "electron": "electron ."
+  }
+}

@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>ESP Web Server</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="chart.umd.js"></script>
+    <script>
+        /**  @type {HTMLElement} */
+        let eqContainer;
+        /**  @type {HTMLElement} */
+        let main;
+        window.onload = function () {
+            eqContainer = document.getElementById('eq-container');
+            main = document.getElementById('main');
+            SyncSizes();
+            window.onresize = SyncSizes;
+        }
+        function SyncSizes() {
+            eqContainer.style.width = main.offsetWidth + 'px';
+            eqContainer.style.height = main.offsetHeight + 'px';
+        }
+    </script>
+    <style>
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main" style="height: 100%;">
+        <div id="eq-container" class="content" style="position: relative;">
+            <canvas id="eq"></canvas>
+        </div>
+    </div>
+    <script>
+        const ctx = document.getElementById('eq');
+
+        const c = new Chart(ctx, {
+            type: 'line',
+            data: {
+                datasets: [{
+                    label: '',
+                    data: [],
+                    borderWidth: 1
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                animation: false,
+                responsive: true,
+                scales: {
+                    y: {
+                        min: -20, max: 20
+                    }
+                }
+            },
+        });
+
+        window.events.onFrequencyData((event, fr, db) => {
+            console.log(fr, db);
+            c.data.datasets[0].data[fr] = db;
+            c.update();
+        })
+        window.events.getFreqs().then((array) => {
+            c.data.datasets[0].data = array;
+            c.data.labels = array.map(e => e.toString())
+            c.update();
+        });
+    </script>
+</body>
+
+</html>
